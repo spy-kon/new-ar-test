@@ -28,7 +28,7 @@
       <!-- Default video (εμφανίζεται όταν ανιχνεύεται το target) -->
       <video
         id="video-default"
-        src="videos/default.mp4"
+        src="videos/main-video.webm"
         preload="auto"
         loop
         muted
@@ -37,10 +37,11 @@
       ></video>
 
       <!-- Βίντεο τοποθεσιών -->
-      <video id="video-1" src="videos/location1.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
-      <video id="video-2" src="videos/location2.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
-      <video id="video-3" src="videos/location3.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
-      <video id="video-4" src="videos/location4.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-1" src="videos/xartis-ar-axaiaklaous.webm"      preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-2" src="videos/xartis-ar-faros.webm"            preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-3" src="videos/xartis-ar-kastro-patras.webm"    preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-4" src="videos/xartis-ar-mouseio.webm"          preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-5" src="videos/xartis-ar-plateia-georgiou.webm" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -109,37 +110,44 @@
       </div>
       <ul>
         <li>
-          <button class="location-btn active" data-video="video-default" data-label="Default" role="menuitem">
+          <button class="location-btn active" data-video="video-default" data-label="Main Video" role="menuitem">
             <span class="loc-icon">🎬</span>
-            <span class="loc-name">Default</span>
+            <span class="loc-name">Main Video</span>
             <span class="loc-badge">▶</span>
           </button>
         </li>
         <li>
-          <button class="location-btn" data-video="video-1" data-label="Τοποθεσία 1" role="menuitem">
+          <button class="location-btn" data-video="video-1" data-label="Αχαϊακλάους" role="menuitem">
             <span class="loc-icon">📍</span>
-            <span class="loc-name">Τοποθεσία 1</span>
+            <span class="loc-name">Αχαϊακλάους</span>
             <span class="loc-badge">▶</span>
           </button>
         </li>
         <li>
-          <button class="location-btn" data-video="video-2" data-label="Τοποθεσία 2" role="menuitem">
+          <button class="location-btn" data-video="video-2" data-label="Φάρος" role="menuitem">
             <span class="loc-icon">📍</span>
-            <span class="loc-name">Τοποθεσία 2</span>
+            <span class="loc-name">Φάρος</span>
             <span class="loc-badge">▶</span>
           </button>
         </li>
         <li>
-          <button class="location-btn" data-video="video-3" data-label="Τοποθεσία 3" role="menuitem">
+          <button class="location-btn" data-video="video-3" data-label="Κάστρο Πατρών" role="menuitem">
             <span class="loc-icon">📍</span>
-            <span class="loc-name">Τοποθεσία 3</span>
+            <span class="loc-name">Κάστρο Πατρών</span>
             <span class="loc-badge">▶</span>
           </button>
         </li>
         <li>
-          <button class="location-btn" data-video="video-4" data-label="Τοποθεσία 4" role="menuitem">
+          <button class="location-btn" data-video="video-4" data-label="Μουσείο" role="menuitem">
             <span class="loc-icon">📍</span>
-            <span class="loc-name">Τοποθεσία 4</span>
+            <span class="loc-name">Μουσείο</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+        <li>
+          <button class="location-btn" data-video="video-5" data-label="Πλατεία Γεωργίου" role="menuitem">
+            <span class="loc-icon">📍</span>
+            <span class="loc-name">Πλατεία Γεωργίου</span>
             <span class="loc-badge">▶</span>
           </button>
         </li>
