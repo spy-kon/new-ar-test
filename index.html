@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AR Experience</title>
+
+  <!-- A-Frame -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.2/aframe.min.js"></script>
+
+  <!-- MindAR -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── AR SCENE ─────────────────────────────────────────── -->
+  <a-scene
+    id="ar-scene"
+    mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiLoading: #loading-overlay; uiScanning: #scanning-overlay; uiError: #error-overlay;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+  >
+    <a-assets>
+      <!-- Default video (εμφανίζεται όταν ανιχνεύεται το target) -->
+      <video
+        id="video-default"
+        src="videos/default.mp4"
+        preload="auto"
+        loop
+        muted
+        playsinline
+        crossorigin="anonymous"
+      ></video>
+
+      <!-- Βίντεο τοποθεσιών -->
+      <video id="video-1" src="videos/location1.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-2" src="videos/location2.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-3" src="videos/location3.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+      <video id="video-4" src="videos/location4.mp4" preload="auto" loop muted playsinline crossorigin="anonymous"></video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <!-- Image Target #0 -->
+    <a-entity mindar-image-target="targetIndex: 0">
+      <!-- Επίπεδο βίντεο — aspect ratio 16:9 → width=1, height=0.5625 -->
+      <a-video
+        id="ar-video-plane"
+        src="#video-default"
+        width="1"
+        height="0.5625"
+        position="0 0 0"
+        rotation="0 0 0"
+      ></a-video>
+    </a-entity>
+  </a-scene>
+
+  <!-- ── LOADING / SCANNING / ERROR OVERLAYS ────────────────── -->
+  <div id="loading-overlay" class="overlay">
+    <div class="overlay-content">
+      <div class="spinner"></div>
+      <p>Φόρτωση AR…</p>
+    </div>
+  </div>
+
+  <div id="scanning-overlay" class="overlay">
+    <div class="overlay-content">
+      <div class="scan-frame">
+        <span class="corner tl"></span>
+        <span class="corner tr"></span>
+        <span class="corner bl"></span>
+        <span class="corner br"></span>
+      </div>
+      <p>Στρέψτε την κάμερα στην εικόνα-στόχο</p>
+    </div>
+  </div>
+
+  <div id="error-overlay" class="overlay hidden">
+    <div class="overlay-content">
+      <p>⚠️ Σφάλμα AR. Ανανεώστε τη σελίδα.</p>
+    </div>
+  </div>
+
+  <!-- ── HUD (εμφανίζεται μόνο όταν ανιχνευτεί το target) ──── -->
+  <div id="hud" class="hidden">
+
+    <!-- Ένδειξη ενεργής τοποθεσίας -->
+    <div id="location-label">
+      <span id="location-label-text">Default</span>
+    </div>
+
+    <!-- FAB — κουμπί για άνοιγμα λίστας -->
+    <button id="fab" aria-label="Επιλογή τοποθεσίας">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </svg>
+    </button>
+
+    <!-- Λίστα τοποθεσιών -->
+    <div id="location-menu" class="hidden" role="menu">
+      <div class="menu-header">
+        <span>Επιλογή Τοποθεσίας</span>
+        <button id="close-menu" aria-label="Κλείσιμο">✕</button>
+      </div>
+      <ul>
+        <li>
+          <button class="location-btn active" data-video="video-default" data-label="Default" role="menuitem">
+            <span class="loc-icon">🎬</span>
+            <span class="loc-name">Default</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+        <li>
+          <button class="location-btn" data-video="video-1" data-label="Τοποθεσία 1" role="menuitem">
+            <span class="loc-icon">📍</span>
+            <span class="loc-name">Τοποθεσία 1</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+        <li>
+          <button class="location-btn" data-video="video-2" data-label="Τοποθεσία 2" role="menuitem">
+            <span class="loc-icon">📍</span>
+            <span class="loc-name">Τοποθεσία 2</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+        <li>
+          <button class="location-btn" data-video="video-3" data-label="Τοποθεσία 3" role="menuitem">
+            <span class="loc-icon">📍</span>
+            <span class="loc-name">Τοποθεσία 3</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+        <li>
+          <button class="location-btn" data-video="video-4" data-label="Τοποθεσία 4" role="menuitem">
+            <span class="loc-icon">📍</span>
+            <span class="loc-name">Τοποθεσία 4</span>
+            <span class="loc-badge">▶</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </div><!-- /#hud -->
+
+  <script src="app.js"></script>
+</body>
+</html>

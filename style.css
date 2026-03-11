@@ -1,0 +1,356 @@
+/* ════════════════════════════════════════════
+   style.css — AR Experience UI
+   ════════════════════════════════════════════ */
+
+/* ── Reset & Base ───────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent:       #00e5ff;
+  --accent-dark:  #0097a7;
+  --surface:      rgba(10, 14, 20, 0.88);
+  --surface-light:rgba(20, 28, 38, 0.95);
+  --text:         #f0f4f8;
+  --text-muted:   #8fa3b1;
+  --radius:       14px;
+  --radius-sm:    8px;
+  --fab-size:     58px;
+  --transition:   0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --font:         'Segoe UI', system-ui, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font);
+  background: #000;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* ── Utility ────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── A-Frame canvas full screen ─────────────── */
+a-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ════════════════════════════════════════════
+   OVERLAYS
+   ════════════════════════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: var(--text);
+  text-align: center;
+  padding: 0 32px;
+}
+
+.overlay-content p {
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+/* Spinner */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scan frame */
+.scan-frame {
+  position: relative;
+  width: 220px;
+  height: 160px;
+}
+
+.corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: var(--accent);
+  border-style: solid;
+}
+.corner.tl { top: 0; left: 0;  border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
+.corner.tr { top: 0; right: 0; border-width: 3px 3px 0 0; border-radius: 0 4px 0 0; }
+.corner.bl { bottom: 0; left: 0;  border-width: 0 0 3px 3px; border-radius: 0 0 0 4px; }
+.corner.br { bottom: 0; right: 0; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
+
+/* Scanning line animation */
+.scan-frame::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  top: 0;
+  animation: scan-line 2s ease-in-out infinite;
+}
+
+@keyframes scan-line {
+  0%   { top: 6px;   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: calc(100% - 6px); opacity: 0; }
+}
+
+/* ════════════════════════════════════════════
+   HUD WRAPPER
+   ════════════════════════════════════════════ */
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none; /* κλικ μόνο σε παιδιά */
+}
+
+/* ── Location label (πάνω αριστερά) ──────────── */
+#location-label {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid rgba(0,229,255,0.22);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 18px rgba(0,229,255,0.12);
+}
+
+#location-label::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.6); }
+}
+
+/* ── FAB (κάτω δεξιά) ───────────────────────── */
+#fab {
+  position: absolute;
+  bottom: 32px;
+  right: 24px;
+  pointer-events: all;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 20px rgba(0,229,255,0.45),
+    0 0 0 0 rgba(0,229,255,0.4);
+  transition: transform var(--transition), box-shadow var(--transition);
+  animation: fab-idle 3s ease-in-out infinite;
+}
+
+#fab svg {
+  width: 26px;
+  height: 26px;
+  transition: transform var(--transition);
+}
+
+#fab:hover {
+  transform: scale(1.08);
+  box-shadow:
+    0 6px 28px rgba(0,229,255,0.65),
+    0 0 0 6px rgba(0,229,255,0.12);
+  animation: none;
+}
+
+#fab:active {
+  transform: scale(0.94);
+}
+
+/* FAB aperta → icona ruota */
+#fab.open svg {
+  transform: rotate(45deg);
+}
+
+@keyframes fab-idle {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0,229,255,0.45), 0 0 0 0 rgba(0,229,255,0.3); }
+  50%       { box-shadow: 0 4px 20px rgba(0,229,255,0.45), 0 0 0 10px rgba(0,229,255,0); }
+}
+
+/* ── Location menu (κάτω δεξιά, πάνω από FAB) ── */
+#location-menu {
+  position: absolute;
+  bottom: calc(var(--fab-size) + 48px);
+  right: 24px;
+  pointer-events: all;
+  width: min(300px, calc(100vw - 48px));
+  background: var(--surface-light);
+  border: 1px solid rgba(0,229,255,0.18);
+  border-radius: var(--radius);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 16px 48px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  transform-origin: bottom right;
+  animation: menu-in var(--transition) both;
+}
+
+@keyframes menu-in {
+  from { opacity: 0; transform: scale(0.88) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+/* Menu header */
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+#close-menu {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color var(--transition), background var(--transition);
+}
+#close-menu:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+}
+
+/* List */
+#location-menu ul {
+  list-style: none;
+  padding: 8px 0;
+}
+
+#location-menu li + li {
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Location buttons */
+.location-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition), color var(--transition);
+  border-radius: 0;
+}
+
+.location-btn:hover {
+  background: rgba(0,229,255,0.08);
+}
+
+.location-btn.active {
+  background: rgba(0,229,255,0.14);
+  color: var(--accent);
+}
+
+.loc-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.loc-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.loc-badge {
+  font-size: 0.7rem;
+  opacity: 0.4;
+  transition: opacity var(--transition);
+}
+
+.location-btn.active .loc-badge {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.location-btn:hover .loc-badge {
+  opacity: 0.9;
+}
+
+/* ── Responsive small screens ───────────────── */
+@media (max-height: 600px) {
+  #location-menu {
+    bottom: calc(var(--fab-size) + 36px);
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+
+  #fab {
+    bottom: 20px;
+  }
+}
